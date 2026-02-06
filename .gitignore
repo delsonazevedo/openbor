@@ -18,3 +18,6 @@ tools/devkitpro/*
 # switch port
 .idea
 cmake-build*
+build_switch*
+game*
+log*

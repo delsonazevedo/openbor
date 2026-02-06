@@ -8168,6 +8168,11 @@ void lcmHandleCommandAimove(ArgList *arglist, s_model *newchar, int *aimoveset, 
         {
             newchar->aimove |= AIMOVE1_NOMOVE;
         }
+        else if(stricmp(value, "boomerang") == 0)
+        {
+             printf("Warning: Model '%s' uses unsupported A.I. move switch: '%s'\n", filename, value);
+             //newchar->aimove |= AIMOVE1_BOOMERANG; 
+        }
         else
         {
             borShutdown(1, "Model '%s' has invalid A.I. move switch: '%s'", filename, value);
