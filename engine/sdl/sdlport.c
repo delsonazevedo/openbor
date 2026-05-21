@@ -153,10 +153,36 @@ int main(int argc, char *argv[])
 
    // Test command line argument to launch MOD
    int romArg = 0;
-   if(argc == 2) {
-      memcpy(packfile, argv[1], strlen(argv[1]));
-      if(fileExists(packfile)) {
-         romArg = 1;
+   if(argc >= 2) {
+      int i;
+      char candidate[MAX_FILENAME_LEN];
+      for(i = 1; i < argc && !romArg; i++) {
+         if(!argv[i] || !argv[i][0]) continue;
+
+         // Try the argument as given (absolute paths like
+         // sdmc:/switch/openbor/Paks/MyGame.pak from forwarders).
+         memset(candidate, 0, sizeof(candidate));
+         strncpy(candidate, argv[i], sizeof(candidate) - 1);
+         if(fileExists(candidate)) {
+            memset(packfile, 0, sizeof(packfile));
+            strncpy(packfile, candidate, sizeof(packfile) - 1);
+            romArg = 1;
+            break;
+         }
+
+         // Bare filename: resolve inside paksDir.
+         if(!strchr(argv[i], '/') && !strchr(argv[i], '\\') && !strchr(argv[i], ':')) {
+            memset(candidate, 0, sizeof(candidate));
+            strncpy(candidate, paksDir, sizeof(candidate) - 1);
+            strncat(candidate, "/", sizeof(candidate) - strlen(candidate) - 1);
+            strncat(candidate, argv[i], sizeof(candidate) - strlen(candidate) - 1);
+            if(fileExists(candidate)) {
+               memset(packfile, 0, sizeof(packfile));
+               strncpy(packfile, candidate, sizeof(packfile) - 1);
+               romArg = 1;
+               break;
+            }
+         }
       }
    }
 

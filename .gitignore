@@ -19,5 +19,6 @@ tools/devkitpro/*
 .idea
 cmake-build*
 build_switch*
+build*
 game*
 log*
